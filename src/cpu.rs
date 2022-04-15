@@ -325,7 +325,7 @@ impl Cpu {
 
     /// Jumps if the carry flag is set
     pub fn jmp_ic(&mut self, address: u16) -> PCAction {
-        println!("jmp_iz");
+        println!("jmp_ic");
         if self.carry {
             self.carry = false;
             return PCAction::Jump(address as usize);
