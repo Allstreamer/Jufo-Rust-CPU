@@ -6,13 +6,13 @@ pub enum PCAction {
     Jump(usize),
 }
 
-// Defines Cpu Structure and it's values
+/// Underlying CPU struct that keeps the state (and some internal values)
 pub struct Cpu {
     pub pc: usize,
     pub memory: [u8; 4096],
     pub rom: [u8; 4096],
     pub acc: u8,
-    pub overflow: bool,
+    pub carry: bool,
     pub running: bool,
 }
 
@@ -24,7 +24,7 @@ impl Cpu {
             rom: [0; 4096],
             memory: [0; 4096],
             acc: 0,
-            overflow: false,
+            carry: false,
             running: false,
         }
     }
@@ -33,7 +33,7 @@ impl Cpu {
         self.pc = 0;
         self.memory = self.rom;
         self.acc = 0;
-        self.overflow = false;
+        self.carry = false;
         self.running = false;
     }
 
@@ -77,6 +77,7 @@ impl Cpu {
                 ui.label(RichText::new(format!("Accumulator: {:03}", self.acc)).size(28.0));
                 ui.label(RichText::new(format!("Program Counter: {:04}", self.pc * 2)).size(28.0));
             });
+            ui.label(RichText::new(format!("Carry: {}", self.carry)));
             ui.add_space(10.0);
 
             let current_address = self.pc * 2;
@@ -175,7 +176,7 @@ impl Cpu {
             // Jump if the number in the Math register is zero
             0xB => self.jmp_iz(address), // Jump If Zero
             // Jump If Carry
-            0xC => PCAction::Step,
+            0xC => self.jmp_ic(address),
             // Unconditional Jump
             0xD => PCAction::Jump(address as usize),
 
@@ -242,7 +243,7 @@ impl Cpu {
         let res = self.acc.overflowing_add(value);
 
         self.acc = res.0;
-        self.overflow = res.1;
+        self.carry = res.1;
 
         PCAction::Step
     }
@@ -253,7 +254,7 @@ impl Cpu {
         let res = self.acc.overflowing_sub(value);
 
         self.acc = res.0;
-        self.overflow = res.1;
+        self.carry = res.1;
 
         PCAction::Step
     }
@@ -264,7 +265,7 @@ impl Cpu {
         let res = self.acc.overflowing_add(self.memory[address as usize]);
 
         self.acc = res.0;
-        self.overflow = res.1;
+        self.carry = res.1;
 
         PCAction::Step
     }
@@ -275,7 +276,7 @@ impl Cpu {
         let res = self.acc.overflowing_sub(self.memory[address as usize]);
 
         self.acc = res.0;
-        self.overflow = res.1;
+        self.carry = res.1;
 
         PCAction::Step
     }
@@ -286,7 +287,7 @@ impl Cpu {
         let res = self.memory[address as usize].overflowing_add(1);
 
         self.memory[address as usize] = res.0;
-        self.overflow = res.1;
+        self.carry = res.1;
 
         PCAction::Step
     }
@@ -297,7 +298,7 @@ impl Cpu {
         let res = self.memory[address as usize].overflowing_sub(1);
 
         self.memory[address as usize] = res.0;
-        self.overflow = res.1;
+        self.carry = res.1;
 
         PCAction::Step
     }
@@ -316,6 +317,17 @@ impl Cpu {
     pub fn jmp_iz(&mut self, address: u16) -> PCAction {
         println!("jmp_iz");
         if self.acc == 0 {
+            return PCAction::Jump(address as usize);
+        }
+
+        PCAction::Step
+    }
+
+    /// Jumps if the carry flag is set
+    pub fn jmp_ic(&mut self, address: u16) -> PCAction {
+        println!("jmp_iz");
+        if self.carry {
+            self.carry = false;
             return PCAction::Jump(address as usize);
         }
 

@@ -68,7 +68,6 @@ impl RomEditor {
                     Some(v) => v,
                 };
 
-                println!("{} {}", operation, arg);
                 let arg_decode = match arg.trim().parse::<u16>() {
                     Ok(v) => v,
                     Err(_) => return,
