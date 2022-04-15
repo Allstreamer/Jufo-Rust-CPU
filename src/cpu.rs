@@ -60,11 +60,7 @@ impl Cpu {
                     self.running = false;
                 }
                 if ui
-                    .button(
-                        RichText::new("Reset")
-                            .size(20.0)
-                            .strong()
-                    )
+                    .button(RichText::new("Reset").size(20.0).strong())
                     .clicked()
                 {
                     self.reset()
