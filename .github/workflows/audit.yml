@@ -5,6 +5,7 @@ on:
             - '**/Cargo.toml'
 jobs:
     security_audit:
+        name: Audit
         runs-on: ubuntu-latest
         steps:
             - uses: actions/checkout@v1
