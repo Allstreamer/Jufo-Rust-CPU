@@ -29,7 +29,7 @@ impl RomEditor {
             ScrollArea::vertical().show(ui, |ui| {
                 for (i, line) in (&self.filtered).iter().enumerate() {
                     ui.horizontal(|ui| {
-                        ui.label(format!("{}", i));
+                        ui.label(format!("{:04}.", i + 1));
                         ui.label(RichText::new(line));
                     });
                 }
@@ -40,7 +40,7 @@ impl RomEditor {
             ScrollArea::vertical().show(ui, |ui| {
                 for (i, n) in self.rom.iter().enumerate() {
                     ui.horizontal(|ui| {
-                        ui.label(format!("{}", i));
+                        ui.label(format!("{:04}.", i + 1));
                         ui.label(format!("{}", (n >> 8) as u8));
                         ui.label(format!("{}", *n as u8));
                     });
@@ -105,7 +105,8 @@ impl RomEditor {
 
 impl Default for RomEditor {
     fn default() -> Self {
-        let default_code = String::from("\
+        let default_code = String::from(
+            "\
 # Multiplyer
 
 # Set First Number to multiply into register 40
@@ -127,7 +128,8 @@ load 42
 
 # Save Result into Acc and stay
 load 42
-jmp 12");
+jmp 12",
+        );
 
         Self {
             code: default_code.clone(),

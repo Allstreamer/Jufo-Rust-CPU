@@ -74,8 +74,8 @@ impl Cpu {
 
             ui.add_space(10.0);
             ui.horizontal(|ui| {
-                ui.label(RichText::new(format!("Accumulator: {}", self.acc)).size(28.0));
-                ui.label(RichText::new(format!("Program Counter: {}", self.pc * 2)).size(28.0));
+                ui.label(RichText::new(format!("Accumulator: {:03}", self.acc)).size(28.0));
+                ui.label(RichText::new(format!("Program Counter: {:04}", self.pc * 2)).size(28.0));
             });
             ui.add_space(10.0);
 
@@ -96,7 +96,7 @@ impl Cpu {
                         ui.label(RichText::new(format!("{:#06x}", i)).raised());
                         for j in 0..8 {
                             let mut txt =
-                                RichText::new(format!("{}", self.memory[i + j])).size(21.0);
+                                RichText::new(format!("{:03}", self.memory[i + j])).size(21.0);
 
                             if i + j == self.pc * 2 || (i + j).wrapping_sub(1) == (self.pc * 2) {
                                 txt = txt.background_color(Color32::from_rgb(0, 100, 0))
