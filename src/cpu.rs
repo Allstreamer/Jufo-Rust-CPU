@@ -64,7 +64,6 @@ impl Cpu {
                         RichText::new("Reset")
                             .size(20.0)
                             .strong()
-                            .background_color(Color32::from_rgb(55, 0, 0)),
                     )
                     .clicked()
                 {
