@@ -21,7 +21,7 @@ jobs:
           automatic_release_tag: "latest"
           prerelease: true
           title: "Development Build"
-          files: /target/release/Jufo-Rust-CPU.exe
+          files: ./target/release/Jufo-Rust-CPU.exe
   build-linux:
     name: Rust - Linux
     runs-on: ubuntu-latest
