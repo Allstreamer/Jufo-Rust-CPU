@@ -79,8 +79,8 @@ impl Cpu {
             let operation: u8 = (self.memory[current_address] & 0xF0) >> 4;
             let value: u8 = self.memory[current_address + 1];
             let address: u16 = ((self.memory[current_address] & 0x0F) as u16) << 8 | value as u16;
-            ui.label(RichText::new(format!("Befehl: {:08b}", operation)).size(20.0));
-            ui.label(RichText::new(format!("Wert: {:08b}", value)).size(20.0));
+            ui.label(RichText::new(format!("Befehl: {:08b} | 0x{:1x}", operation, operation)).size(20.0));
+            ui.label(RichText::new(format!("Wert: {:08b} | {:03}", value, value)).size(20.0));
             ui.label(RichText::new(format!("Adresse: {:012b}", address)).size(20.0));
 
             ui.add_space(10.0);
@@ -95,7 +95,7 @@ impl Cpu {
                                 RichText::new(format!("{:03}", self.memory[i + j])).size(21.0);
 
                             if i + j == self.pc * 2 || (i + j).wrapping_sub(1) == (self.pc * 2) {
-                                txt = txt.background_color(Color32::from_rgb(0, 100, 0))
+                                txt = txt.background_color(Color32::from_rgb(0, 200, 0))
                             }
                             ui.label(txt);
                         }
@@ -208,7 +208,6 @@ impl Cpu {
     /// Gets the last 8 bits of the current instruction and
     /// inserts them into the math register
     pub fn set_value(&mut self, value: u8) -> PCAction {
-        println!("set_value");
         self.acc = value;
 
         PCAction::Step
@@ -217,7 +216,6 @@ impl Cpu {
     /// Loads value from memory, based on the 12-bit address provided,
     /// into math register
     pub fn load(&mut self, address: u16) -> PCAction {
-        println!("load");
         self.acc = self.memory[address as usize];
 
         PCAction::Step
@@ -226,7 +224,6 @@ impl Cpu {
     /// Saves Value from math register into memory,
     /// based on the 12-bit address provided.
     pub fn save(&mut self, address: u16) -> PCAction {
-        println!("save");
         self.memory[address as usize] = self.acc;
 
         PCAction::Step
@@ -234,7 +231,6 @@ impl Cpu {
 
     /// Adds Provided 8-bit number to the math register
     pub fn add(&mut self, value: u8) -> PCAction {
-        println!("add");
         let res = self.acc.overflowing_add(value);
 
         self.acc = res.0;
@@ -245,7 +241,6 @@ impl Cpu {
 
     /// Subtracts Provided 8-bit number to the math register
     pub fn subtract(&mut self, value: u8) -> PCAction {
-        println!("subtract");
         let res = self.acc.overflowing_sub(value);
 
         self.acc = res.0;
@@ -256,7 +251,6 @@ impl Cpu {
 
     /// Adds Provided 8-bit number to the math register
     pub fn add_mem(&mut self, address: u16) -> PCAction {
-        println!("add_mem");
         let res = self.acc.overflowing_add(self.memory[address as usize]);
 
         self.acc = res.0;
@@ -267,7 +261,6 @@ impl Cpu {
 
     /// Subtracts Provided 8-bit number to the math register
     pub fn subtract_mem(&mut self, address: u16) -> PCAction {
-        println!("subtract_mem");
         let res = self.acc.overflowing_sub(self.memory[address as usize]);
 
         self.acc = res.0;
@@ -278,7 +271,6 @@ impl Cpu {
 
     /// Increase Value in memory, based on the 12-bit address provided.
     pub fn increase(&mut self, address: u16) -> PCAction {
-        println!("increase");
         let res = self.memory[address as usize].overflowing_add(1);
 
         self.memory[address as usize] = res.0;
@@ -289,7 +281,6 @@ impl Cpu {
 
     /// Decrease Value in memory, based on the 12-bit address provided.
     pub fn decrease(&mut self, address: u16) -> PCAction {
-        println!("decrease");
         let res = self.memory[address as usize].overflowing_sub(1);
 
         self.memory[address as usize] = res.0;
@@ -300,7 +291,6 @@ impl Cpu {
 
     /// Jumps to the 12-bit address if the number in the math register is not zero
     pub fn jmp_inz(&mut self, address: u16) -> PCAction {
-        println!("jmp_inz");
         if self.acc != 0 {
             return PCAction::Jump(address as usize);
         }
@@ -310,7 +300,6 @@ impl Cpu {
 
     /// Jumps to the 12-bit address if the number in the math register is zero
     pub fn jmp_iz(&mut self, address: u16) -> PCAction {
-        println!("jmp_iz");
         if self.acc == 0 {
             return PCAction::Jump(address as usize);
         }
@@ -320,7 +309,6 @@ impl Cpu {
 
     /// Jumps if the carry flag is set
     pub fn jmp_ic(&mut self, address: u16) -> PCAction {
-        println!("jmp_ic");
         if self.carry {
             self.carry = false;
             return PCAction::Jump(address as usize);
