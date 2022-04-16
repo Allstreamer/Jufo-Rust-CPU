@@ -3,9 +3,11 @@ use eframe::{run_native, NativeOptions};
 use egui::Context;
 
 mod cpu;
+mod instruction_table;
 mod rom_editor;
 
 use cpu::Cpu;
+use instruction_table::draw_instruction_table;
 use rom_editor::RomEditor;
 
 struct CPUInterface {
@@ -27,6 +29,8 @@ impl App for CPUInterface {
         if self.editor.valid {
             self.cpu.load_sixteen_bit_rom(&self.editor.rom);
         }
+
+        draw_instruction_table(ctx);
     }
 
     fn name(&self) -> &str {

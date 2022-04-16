@@ -29,7 +29,7 @@ impl RomEditor {
             ScrollArea::vertical().show(ui, |ui| {
                 for (i, line) in (&self.filtered).iter().enumerate() {
                     ui.horizontal(|ui| {
-                        ui.label(format!("{:04}.", i + 1));
+                        ui.label(format!("{:04}.", i));
                         ui.label(RichText::new(line));
                     });
                 }
@@ -40,7 +40,7 @@ impl RomEditor {
             ScrollArea::vertical().show(ui, |ui| {
                 for (i, n) in self.rom.iter().enumerate() {
                     ui.horizontal(|ui| {
-                        ui.label(format!("{:04}.", i + 1));
+                        ui.label(format!("{:04}.", i));
                         ui.label(format!("{}", (n >> 8) as u8));
                         ui.label(format!("{}", *n as u8));
                     });
@@ -78,9 +78,9 @@ impl RomEditor {
                     "load" => 0x2,
                     "save" => 0x3,
                     "add" => 0x4,
-                    "subtract" => 0x5,
+                    "sub" => 0x5,
                     "add_mem" => 0x6,
-                    "subtract_mem" => 0x7,
+                    "sub_mem" => 0x7,
                     "inc" => 0x8,
                     "dec" => 0x9,
                     "jmp_inz" => 0xA,
