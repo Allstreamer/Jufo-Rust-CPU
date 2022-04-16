@@ -1,7 +1,7 @@
 # Rust CPU
 A Learning tool for the fundamentals of Central processing units
 
-![UI-Preview](https://raw.githubusercontent.com/Allstreamer/Jufo-Rust-CPU/main/screenshot-1.png)
+![UI-Preview](https://raw.githubusercontent.com/Allstreamer/Jufo-Rust-CPU/master/screenshot-1.png)
 
 ## Built with
 - Rust 1.60.0
