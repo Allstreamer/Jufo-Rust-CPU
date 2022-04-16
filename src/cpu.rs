@@ -79,7 +79,9 @@ impl Cpu {
             let operation: u8 = (self.memory[current_address] & 0xF0) >> 4;
             let value: u8 = self.memory[current_address + 1];
             let address: u16 = ((self.memory[current_address] & 0x0F) as u16) << 8 | value as u16;
-            ui.label(RichText::new(format!("Befehl: {:08b} | 0x{:1x}", operation, operation)).size(20.0));
+            ui.label(
+                RichText::new(format!("Befehl: {:08b} | 0x{:1x}", operation, operation)).size(20.0),
+            );
             ui.label(RichText::new(format!("Wert: {:08b} | {:03}", value, value)).size(20.0));
             ui.label(RichText::new(format!("Adresse: {:012b}", address)).size(20.0));
 
